@@ -1,4 +1,3 @@
-// pagina de categoria
 // pages/categorias/[cat].js
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
@@ -8,6 +7,7 @@ import Link from "next/link";
 // Componentes
 import Layout from "../../components/layout/Layout";
 import CardNoticia from "../../components/ui/CardNoticia";
+import IconeSvg from "../../components/ui/IconeSvg";
 
 // Funções de API
 import { buscarNoticiasPorCategoria } from "../../lib/api";
@@ -20,6 +20,16 @@ const coresCategorias = {
   cloud: "bg-blue-100 text-blue-800",
   "banco de dados": "bg-red-100 text-red-800",
   default: "bg-gray-100 text-gray-800",
+};
+
+// Mapeamento de ícones para categorias
+const iconesCategorias = {
+  javascript: "javascript",
+  python: "python",
+  frameworks: "react",
+  cloud: "nuvem",
+  "banco de dados": "database",
+  default: "noticias",
 };
 
 // Função para formatar o nome da categoria
@@ -60,6 +70,9 @@ export default function PaginaCategoria() {
   // Determinamos a classe de cor com base na categoria
   const classeCorCategoria = coresCategorias[cat] || coresCategorias.default;
 
+  // Determinamos o ícone baseado na categoria
+  const iconeCategoria = iconesCategorias[cat] || iconesCategorias.default;
+
   return (
     <Layout>
       <Head>
@@ -74,25 +87,35 @@ export default function PaginaCategoria() {
 
       <section className="container mx-auto px-4 py-8">
         <div className="mb-6">
-          <Link href="/" className="text-blue-600 hover:text-blue-800">
-            &larr; Voltar para a página inicial
+          <Link
+            href="/"
+            className="text-blue-600 hover:text-blue-800 flex items-center"
+          >
+            <IconeSvg
+              nome="setaDireita"
+              tamanho="16"
+              className="rotate-180 mr-2"
+            />
+            Voltar para a página inicial
           </Link>
         </div>
 
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">
+          <h1 className="text-3xl font-bold mb-4 flex items-center">
+            <IconeSvg nome={iconeCategoria} tamanho="32" className="mr-3" />
             Artigos sobre {formatarNomeCategoria(cat)}
           </h1>
           <div
-            className={`inline-block px-4 py-2 rounded-md ${classeCorCategoria} text-sm font-medium`}
+            className={`inline-block px-4 py-2 rounded-md ${classeCorCategoria} text-sm font-medium flex items-center`}
           >
+            <IconeSvg nome={iconeCategoria} tamanho="16" className="mr-2" />
             {formatarNomeCategoria(cat)}
           </div>
         </div>
 
         {carregando ? (
           <div className="flex justify-center items-center h-64">
-            <p>Carregando notícias...</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -106,6 +129,13 @@ export default function PaginaCategoria() {
                   Nenhuma notícia encontrada para a categoria{" "}
                   {formatarNomeCategoria(cat)}.
                 </p>
+                <div className="flex justify-center">
+                  <IconeSvg
+                    nome={iconeCategoria}
+                    tamanho="64"
+                    className="text-gray-400 mb-4"
+                  />
+                </div>
                 <p>
                   Novas notícias serão adicionadas em breve. Volte mais tarde!
                 </p>

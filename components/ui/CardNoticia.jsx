@@ -2,6 +2,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import IconeSvg from "./IconeSvg";
 
 export default function CardNoticia({ noticia }) {
   // Formatação da data para exibição em português
@@ -30,10 +31,24 @@ export default function CardNoticia({ noticia }) {
     default: "bg-gray-100 text-gray-800 border-gray-200",
   };
 
+  // Mapeamento de ícones para categorias
+  const iconesCategorias = {
+    javascript: "javascript",
+    python: "python",
+    frameworks: "react",
+    cloud: "nuvem",
+    "banco de dados": "database",
+    default: "noticias",
+  };
+
   // Determinamos a classe de cor com base na categoria (case insensitive)
   const categoriaKey = noticia.categoria ? noticia.categoria.toLowerCase() : "";
   const classeCorCategoria =
     coresCategorias[categoriaKey] || coresCategorias.default;
+
+  // Determinamos o ícone baseado na categoria
+  const iconeCategoria =
+    iconesCategorias[categoriaKey] || iconesCategorias.default;
 
   return (
     <article className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col h-full border border-gray-100 dark:border-gray-700 group">
@@ -49,15 +64,23 @@ export default function CardNoticia({ noticia }) {
           />
         ) : (
           <div className="bg-gray-200 dark:bg-gray-700 h-full w-full flex items-center justify-center">
-            <span className="text-gray-500 dark:text-gray-400">Sem imagem</span>
+            {/* Usar o ícone SVG apropriado para a categoria quando não há imagem */}
+            <div className="p-6 flex items-center justify-center">
+              <IconeSvg
+                nome={iconeCategoria}
+                tamanho="64"
+                className="text-gray-500 dark:text-gray-400"
+              />
+            </div>
           </div>
         )}
 
         {/* Badge da categoria posicionada sobre a imagem */}
         {noticia.categoria && (
           <span
-            className={`absolute top-3 right-3 text-xs px-2 py-1 rounded-full ${classeCorCategoria} border font-medium`}
+            className={`absolute top-3 right-3 text-xs px-2 py-1 rounded-full ${classeCorCategoria} border font-medium flex items-center gap-1`}
           >
+            <IconeSvg nome={iconeCategoria} tamanho="14" />
             {noticia.categoria}
           </span>
         )}
@@ -91,20 +114,11 @@ export default function CardNoticia({ noticia }) {
           className="mt-4 inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium transition-colors"
         >
           Ler mais
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-4 w-4 ml-1 transition-transform group-hover:translate-x-1"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M14 5l7 7m0 0l-7 7m7-7H3"
-            />
-          </svg>
+          <IconeSvg
+            nome="setaDireita"
+            tamanho="16"
+            className="ml-1 transition-transform group-hover:translate-x-1"
+          />
         </Link>
       </div>
     </article>
